@@ -31,8 +31,14 @@ export class SchoolDataService {
     return this.readData();
   }
 
+  doesSchoolNameExist(name: string): boolean {
+    const schools = this.readData();
+    return schools.some((school) => school.name === name);
+  }
+
   create(schoolDto: CreateSchoolDto): School {
     const schools = this.readData();
+
     const newSchool: School = {
       id: schools.length > 0 ? Math.max(...schools.map((s) => s.id)) + 1 : 1,
       ...schoolDto,

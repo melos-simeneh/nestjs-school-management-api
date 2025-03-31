@@ -5,6 +5,8 @@ import {
   Body,
   Query,
   ValidationPipe,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
@@ -27,6 +29,15 @@ export class SchoolController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   create(@Body(ValidationPipe) createSchoolDto: CreateSchoolDto): School {
+    const doesSchoolNameExist = this.schoolService.doesSchoolNameExist(
+      createSchoolDto.name,
+    );
+    if (doesSchoolNameExist) {
+      throw new HttpException(
+        'School name already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return this.schoolService.createSchool(createSchoolDto);
   }
 

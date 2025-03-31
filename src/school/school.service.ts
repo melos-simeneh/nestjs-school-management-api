@@ -12,6 +12,10 @@ export class SchoolService {
     return this.schoolDataService.create(createSchoolDto);
   }
 
+  doesSchoolNameExist(name: string): boolean {
+    return this.schoolDataService.doesSchoolNameExist(name);
+  }
+
   listSchools(listSchoolsDto: ListSchoolsDto): School[] {
     const { latitude, longitude } = listSchoolsDto;
     const schools = this.schoolDataService.findAll();
