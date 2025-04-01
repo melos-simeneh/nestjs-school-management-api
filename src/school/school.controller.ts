@@ -74,7 +74,21 @@ export class SchoolController {
     }
     return result;
   }
-
+  @Get('find')
+  @ApiOperation({ summary: 'Retrieve a specific school by Name' })
+  @ApiResponse({
+    status: 200,
+    description: 'The school was successfully retrieved.',
+    type: School,
+  })
+  @ApiResponse({ status: 404, description: 'School not found' })
+  findOneByName(@Query('name') name: string): School {
+    const school = this.schoolService.findSchoolByName(name);
+    if (!school) {
+      throw new NotFoundException(`School with Name ${name} not found`);
+    }
+    return school;
+  }
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a specific school by ID' })
   @ApiResponse({

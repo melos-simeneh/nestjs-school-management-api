@@ -40,7 +40,10 @@ export class SchoolDataService {
     const schools = this.readData();
     return schools.find((school) => school.id === id);
   }
-
+  findOneByName(name: string): School | undefined {
+    const schools = this.readData();
+    return schools.find((school) => school.name === name);
+  }
   create(schoolDto: CreateSchoolDto): School {
     const schools = this.readData();
 

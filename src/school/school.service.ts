@@ -18,6 +18,9 @@ export class SchoolService {
   findSchoolById(id: number): School | undefined {
     return this.schoolDataService.findOneById(id);
   }
+  findSchoolByName(name: string): School | undefined {
+    return this.schoolDataService.findOneByName(name);
+  }
 
   listSchools(listSchoolsDto: ListSchoolsDto): {
     schools: School[];
