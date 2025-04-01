@@ -15,12 +15,16 @@ export class SchoolService {
   doesSchoolNameExist(name: string): boolean {
     return this.schoolDataService.doesSchoolNameExist(name);
   }
+  findSchoolById(id: number): School | undefined {
+    return this.schoolDataService.findOneById(id);
+  }
 
   listSchools(listSchoolsDto: ListSchoolsDto): {
     schools: School[];
     total: number;
     page: number;
     limit: number;
+    hasMore: boolean;
   } {
     const { latitude, longitude, page, limit } = listSchoolsDto;
     const schools = this.schoolDataService.findAll();
@@ -46,6 +50,7 @@ export class SchoolService {
       total: schools.length,
       page,
       limit,
+      hasMore: endIndex < schools.length,
     };
   }
 

@@ -7,6 +7,7 @@ import {
   ValidationPipe,
   HttpException,
   HttpStatus,
+  Param,
 } from '@nestjs/common';
 import { SchoolService } from './school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
@@ -60,6 +61,7 @@ export class SchoolController {
         total: { type: 'number' },
         page: { type: 'number' },
         limit: { type: 'number' },
+        hasMore: { type: 'boolean', default: false },
       },
     },
   })
@@ -71,5 +73,21 @@ export class SchoolController {
       throw new NotFoundException('No schools found');
     }
     return result;
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Retrieve a specific school by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The school was successfully retrieved.',
+    type: School,
+  })
+  @ApiResponse({ status: 404, description: 'School not found' })
+  findOne(@Param('id') id: number): School {
+    const school = this.schoolService.findSchoolById(id);
+    if (!school) {
+      throw new NotFoundException(`School with ID ${id} not found`);
+    }
+    return school;
   }
 }

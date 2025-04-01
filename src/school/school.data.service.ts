@@ -36,6 +36,11 @@ export class SchoolDataService {
     return schools.some((school) => school.name === name);
   }
 
+  findOneById(id: number): School | undefined {
+    const schools = this.readData();
+    return schools.find((school) => school.id === id);
+  }
+
   create(schoolDto: CreateSchoolDto): School {
     const schools = this.readData();
 
