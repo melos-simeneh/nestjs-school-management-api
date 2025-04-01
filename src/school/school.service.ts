@@ -40,11 +40,11 @@ export class SchoolService {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const paginatedSchools = schoolsWithDistance.slice(startIndex, endIndex);
-    console.log(typeof page);
+
     return {
       schools: paginatedSchools,
       total: schools.length,
-      page: page,
+      page,
       limit,
     };
   }

@@ -66,7 +66,6 @@ export class SchoolController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 404, description: 'No schools found' })
   findAll(@Query() listSchoolsDto: ListSchoolsDto) {
-    console.log(listSchoolsDto);
     const result = this.schoolService.listSchools(listSchoolsDto);
     if (result.total === 0) {
       throw new NotFoundException('No schools found');
