@@ -12,7 +12,12 @@ import { SchoolService } from './school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { ListSchoolsDto } from './dto/list-schools.dto';
 import { School } from './school.entity';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { NotFoundException } from '@nestjs/common';
 
 @ApiTags('schools')
@@ -42,22 +47,30 @@ export class SchoolController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all schools sorted by proximity' })
+  @ApiOperation({
+    summary: 'List all schools sorted by proximity with pagination',
+  })
   @ApiResponse({
     status: 200,
-    description:
-      'List of schools sorted by distance from the provided coordinates',
-    type: [School],
+    description: 'Paginated list of schools sorted by distance',
+    schema: {
+      type: 'object',
+      properties: {
+        schools: { type: 'array', items: { $ref: getSchemaPath(School) } },
+        total: { type: 'number' },
+        page: { type: 'number' },
+        limit: { type: 'number' },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 404, description: 'No schools found' })
-  findAll(@Query() listSchoolsDto: ListSchoolsDto): School[] {
-    const schools = this.schoolService.listSchools(listSchoolsDto);
-
-    if (schools.length === 0) {
+  findAll(@Query() listSchoolsDto: ListSchoolsDto) {
+    console.log(listSchoolsDto);
+    const result = this.schoolService.listSchools(listSchoolsDto);
+    if (result.total === 0) {
       throw new NotFoundException('No schools found');
     }
-
-    return schools;
+    return result;
   }
 }

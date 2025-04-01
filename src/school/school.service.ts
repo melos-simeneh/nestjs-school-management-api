@@ -16,11 +16,16 @@ export class SchoolService {
     return this.schoolDataService.doesSchoolNameExist(name);
   }
 
-  listSchools(listSchoolsDto: ListSchoolsDto): School[] {
-    const { latitude, longitude } = listSchoolsDto;
+  listSchools(listSchoolsDto: ListSchoolsDto): {
+    schools: School[];
+    total: number;
+    page: number;
+    limit: number;
+  } {
+    const { latitude, longitude, page, limit } = listSchoolsDto;
     const schools = this.schoolDataService.findAll();
 
-    return schools
+    const schoolsWithDistance = schools
       .map((school) => ({
         ...school,
         distance: this.calculateDistance(
@@ -31,6 +36,17 @@ export class SchoolService {
         ),
       }))
       .sort((a, b) => a.distance - b.distance);
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedSchools = schoolsWithDistance.slice(startIndex, endIndex);
+    console.log(typeof page);
+    return {
+      schools: paginatedSchools,
+      total: schools.length,
+      page: page,
+      limit,
+    };
   }
 
   private calculateDistance(
