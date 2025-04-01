@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ListSchoolsDto {
@@ -17,4 +17,16 @@ export class ListSchoolsDto {
   @IsNotEmpty()
   @IsNumber()
   longitude: number;
+
+  @ApiProperty({ required: false, default: 1 })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  page: number = 1;
+
+  @ApiProperty({ required: false, default: 10 })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  limit: number = 10;
 }
